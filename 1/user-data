@@ -1,0 +1,20 @@
+#cloud-config
+users:
+  - default
+  - name: user
+    plain_text_passwd: password
+    lock_passwd: false
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIm389xR2mlGjm0QvJAqydbU3Nn/iAP/rZzP02ADwYQp user@mymail.com
+package_update: true
+package_upgrade: true
+packages:
+  - nginx
+runcmd:
+  - mkdir -p /mnt/html
+  - mount -t 9p html /mnt/html
+  - rm -rf /var/www/html
+  - ln -s /mnt/html /var/www/html
+  - systemctl enable nginx
+  - systemctl start nginx
